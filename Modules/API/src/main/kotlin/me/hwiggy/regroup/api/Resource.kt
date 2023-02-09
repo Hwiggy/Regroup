@@ -130,7 +130,7 @@ interface Resource<Kind> {
         fun <Kind> loadFromJarThrowing(
             resource: Resource<Kind>,
             sourcePath: Path,
-            targetPath: Path
+            targetPath: Path = sourcePath
         ) = loadFromJar(resource, sourcePath, targetPath) ?: throw IllegalStateException("Could not load resource!")
 
         /**
