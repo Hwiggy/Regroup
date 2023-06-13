@@ -90,7 +90,8 @@ interface Resource<Kind> {
                 val entry = entries.nextElement()
                 val name = entry.name
                 if (!name.startsWith(pathStr)) continue
-                val entryTail = name.substring(pathStr.length + 1)
+                var entryTail = name.substring(pathStr.length)
+                if (entryTail.startsWith("/")) entryTail = entryTail.substring(1)
                 val absolute = dataFolder.resolve(targetPath).resolve(entryTail)
                 if (entry.isDirectory) {
                     absolute.toFile().mkdirs()
