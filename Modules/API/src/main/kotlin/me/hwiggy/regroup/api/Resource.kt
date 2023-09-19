@@ -122,7 +122,7 @@ interface Resource<Kind> {
                 Files.createDirectories(absolute.parent)
                 exportFromJar(jarPath, targetPath)
             }
-            return resource.loader.load(absolute)
+            return loadFromDisk(resource, targetPath)
         }
 
         /**
@@ -133,6 +133,25 @@ interface Resource<Kind> {
             sourcePath: Path,
             targetPath: Path = sourcePath
         ) = loadFromJar(resource, sourcePath, targetPath) ?: throw IllegalStateException("Could not load resource!")
+
+        /**
+         * Loads a resource from the disk, throws if not present
+         */
+        fun <Kind> loadFromDisk(
+            resource: Resource<Kind>,
+            relPath: Path
+        ): Kind? {
+            val absolute = dataFolder.resolve(relPath)
+            return resource.loader.load(absolute)
+        }
+
+        /**
+         * Loads a resource from the disk, returns null if not present
+         */
+        fun <Kind> loadFromDiskThrowing(
+            resource: Resource<Kind>,
+            targetPath: Path
+        ) = loadFromDisk(resource, targetPath) ?: throw IllegalStateException("Could not load resource!")
 
         /**
          * Saves a resource to the disk
