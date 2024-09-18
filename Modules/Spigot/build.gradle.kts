@@ -7,7 +7,7 @@ plugins {
 dependencies {
     compileOnly(kotlin("stdlib"))
     api(project(":Modules:API"))
-    compileOnly("org.spigotmc:spigot-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
 }
 
 publishing {

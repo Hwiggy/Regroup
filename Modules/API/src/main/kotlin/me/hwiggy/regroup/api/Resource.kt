@@ -111,6 +111,12 @@ interface Resource<Kind> {
             return Group(absPath, resource)
         }
 
+        private fun assertHierarchy(path: Path, whenAbsent: () -> Unit = {}) {
+            Files.createDirectories(path.parent)
+            if (!Files.exists(path)) {
+                whenAbsent()
+            }
+        }
         /**
          * Loads a resource from the JAR, returns null if not present
          */
@@ -118,8 +124,7 @@ interface Resource<Kind> {
             resource: Resource<Kind>, jarPath: Path, targetPath: Path = jarPath
         ): Kind? {
             val absolute = dataFolder.resolve(targetPath)
-            if (!Files.exists(absolute)) {
-                Files.createDirectories(absolute.parent)
+            assertHierarchy(absolute) {
                 exportFromJar(jarPath, targetPath)
             }
             return loadFromDisk(resource, targetPath)
@@ -142,6 +147,7 @@ interface Resource<Kind> {
             relPath: Path
         ): Kind? {
             val absolute = dataFolder.resolve(relPath)
+            assertHierarchy(absolute)
             return resource.loader.load(absolute)
         }
 
