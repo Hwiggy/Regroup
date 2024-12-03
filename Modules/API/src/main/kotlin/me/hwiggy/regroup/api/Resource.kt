@@ -2,6 +2,7 @@ package me.hwiggy.regroup.api
 
 import java.io.File
 import java.net.JarURLConnection
+import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -80,8 +81,13 @@ interface Resource<Kind> {
                 val idx = lastIndexOf('.')
                 (if (idx == -1) this else this.substring(idx + 1)) + ".class"
             }
-            val jarPath = mainClass.getResource(className) ?: return
-            if (!jarPath.toString().startsWith("jar:file:")) return
+            var jarPath = mainClass.getResource(className) ?: return
+            val jarPathStr = jarPath.toString()
+            if (!Regex("^(jar:)?file:").matches(jarPathStr)) return
+            if (!jarPathStr.startsWith("jar:")) {
+                // Rewrite the JAR URL
+                jarPath = URL("jar:${jarPathStr}")
+            }
             val connection = jarPath.openConnection() as? JarURLConnection ?: return
             val archive = connection.jarFile ?: return
             val entries = archive.entries()
