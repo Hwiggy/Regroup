@@ -83,7 +83,7 @@ interface Resource<Kind> {
             }
             var jarPath = mainClass.getResource(className) ?: return
             val jarPathStr = jarPath.toString()
-            if (!Regex("^(jar:)?file:").matches(jarPathStr)) return
+            Regex("^(jar:)?file:").find(jarPathStr) ?: return
             if (!jarPathStr.startsWith("jar:")) {
                 // Rewrite the JAR URL
                 jarPath = URL("jar:${jarPathStr}")
