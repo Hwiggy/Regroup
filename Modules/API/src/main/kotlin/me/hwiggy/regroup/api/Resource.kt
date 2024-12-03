@@ -83,9 +83,10 @@ interface Resource<Kind> {
             }
             var jarPath = mainClass.getResource(className) ?: return
             val jarPathStr = jarPath.toString()
-            if (!jarPathStr.contains("^(jar:)?file:.*$".toRegex())) return
+            if (!jarPathStr.matches("^(jar:)?file:.*$".toRegex())) return
             if (!jarPathStr.startsWith("jar:")) {
                 // Rewrite the JAR URL
+                // By the way, if you're getting a "No !/ in spec", you have to run the program as a JAR not directly from the class via IDE
                 jarPath = URL("jar:${jarPathStr}")
             }
             val connection = jarPath.openConnection() as? JarURLConnection ?: return
