@@ -8,7 +8,7 @@ allprojects {
     apply(plugin = "maven-publish")
 
     group = "me.hwiggy.regroup"
-    version = "1.1-SNAPSHOT"
+    version = "1.2-SNAPSHOT"
 
     repositories {
         mavenLocal()
